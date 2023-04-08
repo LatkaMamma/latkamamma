@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@util": ["./src/util"],
+      "@util/*": ["./src/util/*"],
+      "@components": ["src/components"],
+      "@components/*": ["src/components/*"],
+      "@styles": ["./src/styles"],
+      "@styles/*": ["./src/styles/*"],
+      "@pages": ["./src/pages"],
+      "@pages/*": ["./src/pages/*"],
+      "@config": ["./src/config"],
+      "@config/*": ["./src/config/*"],
+      "@mail": ["./src/mail"],
+      "@mail/*": ["./src/mail/*"],
+      "@fonts": ["./src/fonts"],
+      "@fonts/*": ["./src/fonts/*"],
+      "@consts": ["./src/constants"],
+      "@consts/*": ["./src/constants/*"],
+      "@middleware": ["./src/middleware"],
+      "@middleware/*": ["./src/middleware/*"],
+      "@sass": ["./src/sass"],
+      "@sass/*": ["./src/sass/*"],
+      "@redux": ["src/redux"],
+      "@redux/*": ["src/redux/*"],
+      "@hooks": ["src/hooks"],
+      "@hooks/*": ["src/hooks/*"],
+      "@apptypes": ["src/types"],
+      "@apptypes/*": ["src/types/*"],
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
+}

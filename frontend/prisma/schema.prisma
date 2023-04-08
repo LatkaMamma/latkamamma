@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GuestSubscriber {
+  id            String      @id @default(cuid())
+  email         String      @unique
+  verified      Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  mailingList   MailingList @relation(fields: [mailingListId], references: [id])
+  mailingListId String
+  bounces       Int         @default(0)
+  complaints    Int         @default(0)
+  deactivated   Boolean     @default(false)
+  removeAfter   DateTime    @default(dbgenerated("now() + interval '30 years'"))
+  fname         String
+  lname         String      @default("")
+}
+
+model MailingList {
+  id          String            @id @default(cuid())
+  name        String            @unique
+  emails_sent Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  guests      GuestSubscriber[]
+  members     Profile[]
+}
+
+model Profile {
+  id           String        @id @default(cuid())
+  user_id      String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  role         Role          @default(USER)
+  fname        String
+  lname        String
+  image        String?
+  reviews      Review[]
+  orders       Order[]
+  mailingLists MailingList[]
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String
+  price       Int
+  images      String[]
+  tags        String[]
+  reviews     Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  body      String
+  rating    Int
+  author    Profile  @relation(fields: [authorId], references: [id])
+  authorId  String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  total     Int
+  items     OrderItem[]
+  user      Profile     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  price     Int
+  quantity  Int
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String
+  vat       Int
+  thumbnail String
+}
+
+model Page {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  body      Json
+  slug      String   @unique
+}
+
+model EmailTemplate {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String
+  defaultSubject Int[]
+  html           Int[]
+  text           Int[]
+}
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt   DateTime
+}

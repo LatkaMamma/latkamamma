@@ -1,0 +1,55 @@
+@charset "utf-8";
+
+
+$orange: hsl(19, 100%, 63);
+$yellow: hsl(50, 98%, 67%);
+$green: hsl(143, 83%, 57%);
+$turquoise: hsl(164, 94%, 52%);
+$cyan: hsl(180, 83%, 58%);
+$blue: hsl(217, 100%, 66);
+$purple: hsl(271, 100%, 66);
+$pink: hsl(330, 100%, 62%);
+$red: hsl(0, 100%, 69%);
+$custom-light: hsl(0, 0%, 96%);
+$custom-dark: hsl(0, 0%, 20%);
+$light: $custom-light;
+$dark: $custom-dark;
+$pink-invert: findColorInvert($pink);
+$pink-light: findLightColor($pink);
+$pink-dark: findDarkColor($pink);
+
+$custom-colors: (
+  "pink": (
+    $pink,
+    $pink-invert,
+    $pink-light,
+    $pink-dark,
+  ),
+);
+
+$primary: $purple;
+$secondary: $pink;
+
+
+.layout {
+  display: flex;
+  flex-direction: column;
+}
+.main-content {
+  flex-grow: 1;
+  width: 100%;
+  padding: 0 1rem;
+}
+.footer {
+  flex-shrink: 0;
+}
+.app,
+#__next,
+body,
+html,
+.layout {
+  height: 100%;
+}
+@import "../../node_modules/bulma/bulma.sass";
+@import "./notifications.scss";
+@import "./backdrop.scss";
