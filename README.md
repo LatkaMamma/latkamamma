@@ -58,7 +58,7 @@ TODO
 This project is under the EUPL (v1.2). For more details, see the [LICENSE](LICENSE.md) file. For translations and more information, please visit [the EUPL website](https://eupl.eu/)
 
 
-Made with :heart: by <a href="https://github.com/LatkaMamma" target="_blank">LätkäMamma Team</a>
+Made with :heart: by <a href="https://latkamamma.fi/about-us#team" target="_blank">LätkäMamma Team</a> (link not working currently)
 
 &#xa0;
 
