@@ -1,0 +1,103 @@
+services:
+  db:
+    container_name: postgres
+    image: postgres:15.1-alpine
+    restart: always
+    env_file:
+      - .env/postgres.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    networks:
+      backend:
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    restart: always
+    env_file:
+      - .env/pgadmin.env
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    expose:
+      - 80
+    networks:
+      backend:
+  logto:
+    container_name: logto
+    image: ghcr.io/logto-io/logto:prerelease
+    entrypoint:
+      [
+        "sh",
+        "-c",
+        "npm run cli db seed -- --swe && npm start"
+      ]
+    env_file:
+      - .env/logto.env
+    expose:
+      - 3001
+    networks:
+      frontend:
+      backend:
+  scheduler:
+    build: ./scheduler
+    image: scheduler
+    container_name: scheduler
+    restart: always
+    volumes:
+      - ./scheduler:/usr/scheduler
+    environment:
+      - SCHEDULER_ENV=dev
+    depends_on:
+      - nextjs
+    networks:
+      schedule_comms:
+  nextjs:
+    build: ./nextjs
+    image: nextjs
+    container_name: nextjs
+    restart: always
+    volumes:
+      - ./nextjs:/usr/nextjs
+    environment:
+      NODE_ENV: development
+      SCHEDULER_IP: ${SCHEDULER_IP}
+    depends_on:
+      - logto
+    expose:
+      - 3000
+    networks:
+      schedule_comms:
+      frontend:
+      backend:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      - ./static:/static
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - pgadmin
+      - db
+      - logto
+      - nextjs
+    networks:
+      frontend:
+
+
+networks:
+  frontend:
+  backend:
+  schedule_comms:
+
+volumes:
+  db_data:
+  pgadmin_data:
